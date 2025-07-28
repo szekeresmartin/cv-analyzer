@@ -137,4 +137,19 @@ p {
     .container {
     margin-top: 12px !important;
   }
+
+  .rich-editor {
+  display: none !important;
+  }
+
+}
+
+.rich-editor {
+  min-height: 120px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  background-color: white;
+  outline: none;
 }
