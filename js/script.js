@@ -1,4 +1,3 @@
-
 const criteria = [
   {
     title: "Az önéletrajz hossza",
@@ -9,29 +8,41 @@ const criteria = [
     placeholder: "Használj PDF-et – formázás és kompatibilitás"
   },
   {
-    title: "Canva vagy egyéb dizájn",
+    title: "Formázási szabályok - Canva vagy más látványos dizájn",
     placeholder: "Miért ne használj Canvát vagy látványos dizájnt?  Mert ezek nem ATS-kompatibilisek."
   },
   {
-    title: "ATS-barát",
+    title: "ATS-kompatibilitás",
     placeholder: "Az ATS rövidítés az Applicant Tracking System angol kifejezésből származik, magyarul jelentkezőkövető rendszer vagy pályázókezelő rendszer a jelentése. Ez egy szoftver, amelyet a munkáltatók használnak a toborzási és kiválasztási folyamat kezelésére és automatizálására."
   },
   {
-    title: "Formázási szabályok",
-    placeholder: "Maradj a fekete-fehér, jól olvasható stílusnál. Betűtípus: Arial, Calibri, Verdana vagy Times New Roman. Betűméret: 11–12 pont, címsoroknál 13–14 pont. Fontos tudni, hogy ugyanaz a betűméret különböző betűtípusok esetén máshogy hat vizuálisan. Például az Arial betűtípus nagyobbnak tűnik, mint a Times New Roman, még ha mindkettőt 11 pontos méretben használod is. Ezért mindig nézd meg a teljes dokumentum kinézetét is, ne csak a számokat, előfordulhat, hogy egy másik betűtípusnál kisebb vagy nagyobb méret lesz a megfelelő az optimális olvashatóság és esztétikum érdekében. A szekciócímeknél használhatsz nagyobb betűméretet, de legfeljebb 2 ponttal nagyobbat, mint a törzsszöveg. Például: ha a szöveg 11 pontos, a címek legyenek maximum 13 pontosak. Egyetlen kivétel a neved, ez lehet ennél nagyobb (pl. 16–18 pont), hogy vizuálisan kiemelkedjen, és segítse az összkép egyensúlyát, különösen, ha sok a fehér tér az oldal tetején. A tartalom tagolásánál ügyelj arra is, hogy a cég neve és a betöltött pozíciód között legyen egy kis extra tér vagy kiemelés (pl. félkövér vagy új sor), így a toborzó könnyen átlátja, hol dolgoztál és milyen szerepben. Ez gyorsabb értelmezést, jobb benyomást eredményez. Használj szimpla vagy 1,5-es sorközt, sorkizárt vagy balra zárt elrendezést. A szekciók legyenek jól elkülönítve, egységes stílusban, félkövér vagy nagyobb betűs címsorokkal. Túl nagy margók (pl. 2,5–3 cm körül) optikailag kevesebb tartalmat mutatnak, így az önéletrajz üresnek vagy kevésbé tartalmasnak tűnhet, még akkor is, ha az információk relevánsak. Ha más pályázók szűkebb margót (pl. 1–1,25 cm) használnak, több információ fér el egy oldalon, és ez hatékonyabb, versenyképesebb benyomást kelthet. Viszont túl szűk margó (pl. 0,5 cm alatti) zavaró és zsúfolt lehet, ami rontja az olvashatóságot – ezt érdemes kerülni. Ha sok releváns tapasztalatod van, nyugodtan csökkentsd a margót 1,5–2 cm közé, hogy minden elférjen 1–2 oldalon- de mindig figyelj arra, hogy ne váljon zsúfolttá a dokumentum. Kerüld a rikító színeket az önéletrajzban! Ne használj élénk, rikító színeket (pl. neonzöld, élénkpiros, narancssárga háttér vagy szöveg). Ezek elvonják a figyelmet a tartalomról, zavaróak lehetnek a szemnek, és komolytalanná tehetik az összképet. A legjobb, ha visszafogott, semleges színeket használsz. Ügyelj a kontrasztra is, ne használj világos szöveget világos háttéren, és kerüld a sötét háttér és sötét szöveg kombinációkat. Nyomtatásnál sokszor fekete-fehér változatban nézik a CV-t – győződj meg róla, hogy úgy is jól olvasható marad."
-  },
+    title: "Formázási szabályok - betűtípus",
+    placeholder: "Maradj a fekete-fehér, jól olvasható stílusnál. Betűtípus: Arial, Calibri, Verdana vagy Times New Roman. Betűméret: 11–12 pont, címsoroknál 13–14 pont. Fontos tudni, hogy ugyanaz a betűméret különböző betűtípusok esetén máshogy hat vizuálisan. Például az Arial betűtípus nagyobbnak tűnik, mint a Times New Roman, még ha mindkettőt 11 pontos méretben használod is. Ezért mindig nézd meg a teljes dokumentum kinézetét is, ne csak a számokat, előfordulhat, hogy egy másik betűtípusnál kisebb vagy nagyobb méret lesz a megfelelő az optimális olvashatóság és esztétikum érdekében. A szekciócímeknél használhatsz nagyobb betűméretet, de legfeljebb 2 ponttal nagyobbat, mint a törzsszöveg. Például: ha a szöveg 11 pontos, a címek legyenek maximum 13 pontosak. Egyetlen kivétel a neved, ez lehet ennél nagyobb (pl. 16–18 pont), hogy vizuálisan kiemelkedjen, és segítse az összkép egyensúlyát, különösen, ha sok a fehér tér az oldal tetején."
+  },  
+  {
+  title: "Formázási szabályok - tagolás",  
+    placeholder: "A tartalom tagolásánál ügyelj arra is, hogy a cég neve és a betöltött pozíciód között legyen egy kis extra tér vagy kiemelés (pl. félkövér vagy új sor), így a toborzó könnyen átlátja, hol dolgoztál és milyen szerepben. Ez gyorsabb értelmezést, jobb benyomást eredményez. Használj szimpla vagy 1,5-es sorközt, sorkizárt vagy balra zárt elrendezést. A szekciók legyenek jól elkülönítve, egységes stílusban, félkövér vagy nagyobb betűs címsorokkal. Túl nagy margók (pl. 2,5–3 cm körül) optikailag kevesebb tartalmat mutatnak, így az önéletrajz üresnek vagy kevésbé tartalmasnak tűnhet, még akkor is, ha az információk relevánsak. Ha más pályázók szűkebb margót (pl. 1–1,25 cm) használnak, több információ fér el egy oldalon, és ez hatékonyabb, versenyképesebb benyomást kelthet. Viszont túl szűk margó (pl. 0,5 cm alatti) zavaró és zsúfolt lehet, ami rontja az olvashatóságot – ezt érdemes kerülni. Ha sok releváns tapasztalatod van, nyugodtan csökkentsd a margót 1,5–2 cm közé, hogy minden elférjen 1–2 oldalon- de mindig figyelj arra, hogy ne váljon zsúfolttá a dokumentum."
+  },  
+  {
+  title: "Formázási szabályok - színek",
+    placeholder: "Kerüld a rikító színeket az önéletrajzban! Ne használj élénk, rikító színeket (pl. neonzöld, élénkpiros, narancssárga háttér vagy szöveg). Ezek elvonják a figyelmet a tartalomról, zavaróak lehetnek a szemnek, és komolytalanná tehetik az összképet. A legjobb, ha visszafogott, semleges színeket használsz. Ügyelj a kontrasztra is, ne használj világos szöveget világos háttéren, és kerüld a sötét háttér és sötét szöveg kombinációkat. Nyomtatásnál sokszor fekete-fehér változatban nézik a CV-t – győződj meg róla, hogy úgy is jól olvasható marad."
+  }, 
+
   {
     title: "Alapadatok",
     placeholder: "Név, telefonszám, professzionális Gmail-es e-mail cím, ne legyen becenév vagy születési év benne. Olyan e-mail cím, amely: tartalmazza a vezetéknevedet és keresztnevedet, például: kiss.mariagmail.com vagy maria.kiss87@gmail.com ha a név már foglalt, kis szám elfogadható nem tartalmaz becenevet, fantázianeveket vagy furcsa karaktereket:cica23gmail.com nagymokusgmail.com szabi1995gmail.com A Gmail-es e-mail cím professzionálisabb benyomást kelt, technikailag megbízhatóbb, és jobban kompatibilis az ATS (jelentkezőkezelő) rendszerekkel. A Citromail, Freemail vagy más elavult szolgáltatók használata régimódinak tűnhet, és akár azt is sugallhatja, hogy nem vagy naprakész digitálisan. A Gmail ráadásul stabil, biztonságos, és számos álláskeresési platformon előny. Az önéletrajz fejlécében a neved alá ne írd azt, hogy Önéletrajz, helyette tüntesd fel a munkakörödet vagy a megpályázott pozíció nevét."
   },
+
   {
+    title: "Felesleges információk",
+    placeholder: "De ne add meg ezeket: lakcím, születési dátum, családi állapot, ezek diszkriminációs hátrányhoz vezethetnek. Miért? Lakcím alapján következtethetnek arra, hogy messze laksz, így kevésbé vagy kényelmes jelölt. Egy agglomerációban élő lehet hamarabb beérne autóval, mint egy városi tömegközlekedéssel. Születési dátum alapján életkor alapján hátrányos megkülönböztetés érhet. Családi állapot (pl. házas, gyermekes) miatt feltételezésekbe bocsátkozhatnak a munkaidővel, elérhetőséggel kapcsolatban. A lényeg: Csak azokat az információkat add meg, amelyek közvetlenül a szakmai alkalmasságodat bizonyítják. Az önéletrajz célja, hogy a képességeidre és tapasztalataidra irányítsa a figyelmet, ne a magánéletedre."
+  },
+
+    {
     title: "LinkedIn profil",
     placeholder: "LinkedIn profil megadása önéletrajzban azért jó, mert kiegészíti a szakmai információkat, naprakész és részletes, növeli a hitelességet, és megkönnyíti a kapcsolatfelvételt a munkaadóval."
   },
-  {
-    title: "Mit ne adj meg",
-    placeholder: "De ne add meg ezeket: lakcím, születési dátum, családi állapot, ezek diszkriminációs hátrányhoz vezethetnek. Miért? Lakcím alapján következtethetnek arra, hogy messze laksz, így kevésbé vagy kényelmes jelölt. Egy agglomerációban élő lehet hamarabb beérne autóval, mint egy városi tömegközlekedéssel. Születési dátum alapján életkor alapján hátrányos megkülönböztetés érhet. Családi állapot (pl. házas, gyermekes) miatt feltételezésekbe bocsátkozhatnak a munkaidővel, elérhetőséggel kapcsolatban. A lényeg: Csak azokat az információkat add meg, amelyek közvetlenül a szakmai alkalmasságodat bizonyítják. Az önéletrajz célja, hogy a képességeidre és tapasztalataidra irányítsa a figyelmet, ne a magánéletedre."
-  },
+
   {
     title: "Fénykép",
     placeholder: "Fénykép nem kötelező, de ha van, legyen friss, ízléses, jó minőségű. Mikor érdemes fotót használni? Ha elvárás: Vannak iparágak (pl. modellkedés, színészet, vendéglátás), ahol természetes, hogy kérnek fotót. Ha úgy érzed, előnyös számodra: Egy jó minőségű, professzionális fotó erősítheti az első benyomást. Ha teszel bele fotót: Legyen friss, lehetőleg 5 éven belüli. Ne szelfi, nyaralós vagy túl laza kép legyen. Használj semleges hátteret és öltözz úgy, mintha állásinterjúra mennél. Ha nem kötelező, nyugodtan hagyd ki a fotót, és koncentrálj arra, hogy az önéletrajzod tartalmilag legyen erős."
