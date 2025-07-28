@@ -12,7 +12,7 @@ const criteria = [
     placeholder: "Miért ne használj Canvát vagy látványos dizájnt?  Mert ezek nem ATS-kompatibilisek."
   },
   {
-    title: "ATS-kompatibilitás",
+    title: "Formázási szabályok - ATS-kompatibilitás",
     placeholder: "Az ATS rövidítés az Applicant Tracking System angol kifejezésből származik, magyarul jelentkezőkövető rendszer vagy pályázókezelő rendszer a jelentése. Ez egy szoftver, amelyet a munkáltatók használnak a toborzási és kiválasztási folyamat kezelésére és automatizálására."
   },
   {
