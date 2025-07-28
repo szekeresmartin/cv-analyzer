@@ -113,10 +113,6 @@ p {
     break-inside: avoid;
   }
 
-  textarea {
-    display: none;
-  }
-
   .print-text {
     display: block;
     white-space: pre-wrap;
@@ -152,4 +148,34 @@ p {
   font-size: 15px;
   background-color: white;
   outline: none;
+}
+
+.toolbar {
+  margin-bottom: 8px;
+}
+
+.toolbar button {
+  margin-right: 6px;
+  padding: 4px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+.rich-editor {
+  min-height: 120px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  background-color: white;
+  outline: none;
+  font-family: inherit;
+  white-space: pre-wrap;
 }
