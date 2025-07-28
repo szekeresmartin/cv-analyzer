@@ -143,30 +143,51 @@ criteria.forEach((item) => {
   const title = document.createElement("h3");
   title.textContent = item.title;
 
+  // Toolbar
+  const toolbar = document.createElement("div");
+  toolbar.className = "toolbar";
+
+  const boldBtn = document.createElement("button");
+  boldBtn.innerHTML = "<b>B</b>";
+  boldBtn.type = "button";
+  boldBtn.onclick = () => document.execCommand("bold");
+
+  const italicBtn = document.createElement("button");
+  italicBtn.innerHTML = "<i>I</i>";
+  italicBtn.type = "button";
+  italicBtn.onclick = () => document.execCommand("italic");
+
+  const listBtn = document.createElement("button");
+  listBtn.innerHTML = "•";
+  listBtn.type = "button";
+  listBtn.onclick = () => document.execCommand("insertUnorderedList");
+
+  toolbar.appendChild(boldBtn);
+  toolbar.appendChild(italicBtn);
+  toolbar.appendChild(listBtn);
+
   // Szerkeszthető mező
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
   editor.innerHTML = item.placeholder;
 
-  // Nyomtatáshoz külön div
+  // Nyomtatási div
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
   printDiv.innerHTML = item.placeholder;
 
-  // Frissíti a nyomtatási verziót, ha változik a szerkesztett tartalom
   editor.addEventListener("input", () => {
     printDiv.innerHTML = editor.innerHTML;
   });
 
-  // Törlés művelet
   deleteBtn.addEventListener("click", () => {
     div.remove();
   });
 
-  // Összeállítás
   div.appendChild(deleteBtn);
   div.appendChild(title);
+  div.appendChild(toolbar);      // ⬅️ ide kerül a toolbar
   div.appendChild(editor);
   div.appendChild(printDiv);
 
