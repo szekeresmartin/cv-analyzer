@@ -194,6 +194,14 @@ criteria.forEach((item) => {
   container.appendChild(div);
 });
 
+// Név mező tükrözése a nyomtatási változatba
+const clientNameInput = document.getElementById("client-name");
+const clientNamePrint = document.getElementById("client-name-print");
+
+clientNameInput.addEventListener("input", () => {
+  clientNamePrint.textContent = clientNameInput.value;
+});
+
 // PDF export
 function downloadPDF() {
   window.print();
