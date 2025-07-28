@@ -8,7 +8,7 @@ const criteria = [
     placeholder: "Használj PDF-et – formázás és kompatibilitás"
   },
   {
-    title: "Formázási szabályok - Sablon",
+    title: "Formázási szabályok - sablon",
     placeholder: "Miért ne használj Canvát vagy látványos dizájnt?  Mert ezek nem ATS-kompatibilisek."
   },
   {
