@@ -15,6 +15,23 @@ body {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
 }
 
+.client-name-input {
+  font-size: 32px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  margin-bottom: 10px;
+  display: block;
+  width: 100%;
+}
+
+.client-name-print {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: none;
+}
+
 .input-section {
   margin-bottom: 30px;
 }
@@ -138,6 +155,14 @@ p {
   display: none !important;
   }
 
+  .client-name-input {
+    display: none !important;
+  }
+
+  .client-name-print {
+    display: block !important;
+  }
+
 }
 
 .rich-editor {
@@ -160,7 +185,7 @@ p {
   font-size: 15px;
   cursor: pointer;
   border: 1px solid #ccc;
-  background-color: #000000;
+  background-color: #f0f0f0;
   border-radius: 4px;
 }
 
@@ -178,4 +203,26 @@ p {
   outline: none;
   font-family: inherit;
   white-space: pre-wrap;
+}
+
+#print-area,
+#print-area * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+@media print {
+  #name {
+    display: none;
+  }
+
+  #name-print {
+    display: block;
+  }
 }
