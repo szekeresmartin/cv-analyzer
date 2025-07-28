@@ -143,31 +143,21 @@ criteria.forEach((item) => {
   const title = document.createElement("h3");
   title.textContent = item.title;
 
-  // Szövegmező szerkesztéshez
-  const textarea = document.createElement("textarea");
-  textarea.value = item.placeholder;
+  // Szerkeszthető mező
+  const editor = document.createElement("div");
+  editor.className = "rich-editor";
+  editor.contentEditable = "true";
+  editor.innerHTML = item.placeholder;
 
-  // Print-re szánt div (nyomtatáskor jelenik meg)
+  // Nyomtatáshoz külön div
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
-  printDiv.textContent = item.placeholder;
+  printDiv.innerHTML = item.placeholder;
 
-  // Automatikus méretezés funkció
-  const autoResize = () => {
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-  };
-
-  // Szöveg módosításkor frissítse a nyomtatási divet is
-  textarea.addEventListener("input", () => {
-    autoResize();
-    printDiv.textContent = textarea.value;
+  // Frissíti a nyomtatási verziót, ha változik a szerkesztett tartalom
+  editor.addEventListener("input", () => {
+    printDiv.innerHTML = editor.innerHTML;
   });
-
-  setTimeout(() => {
-    autoResize();
-    printDiv.textContent = textarea.value;
-  }, 0);
 
   // Törlés művelet
   deleteBtn.addEventListener("click", () => {
@@ -177,18 +167,13 @@ criteria.forEach((item) => {
   // Összeállítás
   div.appendChild(deleteBtn);
   div.appendChild(title);
-  div.appendChild(textarea);
+  div.appendChild(editor);
   div.appendChild(printDiv);
 
   container.appendChild(div);
 });
 
-
+// PDF export
 function downloadPDF() {
   window.print();
-}
-
-function autoResize(textarea) {
-  textarea.style.height = 'auto';
-  textarea.style.height = textarea.scrollHeight + 'px';
 }
