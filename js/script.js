@@ -328,26 +328,20 @@ function loadSave(name) {
 }
 
 function loadDefault() {
-  if (!confirm("Biztosan új oldalt szeretnél kezdeni? A jelenlegi tartalom elvész!")) return;
+  const defaults = [
+    {
+      title: "Fizetési igény",
+      content: "Az önéletrajzban alapvetően nem szükséges megadni a fizetési igényt..."
+    },
+    {
+      title: "Tapasztalatok",
+      content: "Sorold fel a tapasztalatokat, amik az adott pozícióhoz a legjobban kapcsolódnak."
+    }
+  ];
 
-  document.getElementById('client-name').value = '';
-  document.getElementById('client-name-print').innerText = '';
-  document.getElementById('criteria-container').innerHTML = '';
-
-  fetch('defaultBlocks.json')
-    .then(response => response.json())
-    .then(data => {
-      data.forEach(block => {
-        addCustomBlock(block.title, block.content);
-      });
-    })
-    .catch(error => {
-      console.error('Hiba a blokkok betöltésekor:', error);
-      alert('Nem sikerült betölteni az alapértelmezett mezőket.');
-    });
+  container.innerHTML = "";
+  defaults.forEach(block => addCustomBlock(block));
 }
-
-
 
 function updateSaveList() {
   const list = document.getElementById("save-list");
