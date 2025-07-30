@@ -1,6 +1,6 @@
 const criteria = [
   {
-    title: "Az önéletrajz hossza",
+  title: "Az önéletrajz hossza",
     placeholder: "Az önéletrajzod legyen maximum két oldal Kezdőként 1 oldal az ideális, ha tapasztalt szakember vagy, akkor lehet nyugodtan 2 oldalas, de annál több ne legyen, maximum kivételes esetekben. Ugyanis ha a dokumentum túl hosszú, elveszik benne a lényeg, nem fogják végig olvasni, így könnyen a “nem” kupacba kerül. Nem az a cél, hogy minden tapasztalatodat felsorold, hanem az, hogy az adott pozícióhoz legjobban illeszkedő tapasztalatokat és eredményeket mutasd be."
   },
   {
@@ -209,6 +209,7 @@ function downloadPDF() {
 }
 
 function addCustomBlock(title = "", content = "") {
+  const container = document.getElementById("criteria-container");
   const div = document.createElement("div");
   div.className = "criteria";
 
@@ -221,17 +222,8 @@ function addCustomBlock(title = "", content = "") {
   const titleInput = document.createElement("input");
   titleInput.type = "text";
   titleInput.placeholder = "Blokk címe";
-  titleInput.value = title; // 🟢 új
+  titleInput.value = title;
   titleInput.style = "font-weight: bold; font-size: 18px; margin-bottom: 12px; width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px;";
-
-  const printTitle = document.createElement("div");
-  printTitle.className = "client-name-print";
-  printTitle.style.display = "none";
-  printTitle.textContent = title; // 🟢 új
-
-  titleInput.addEventListener("input", () => {
-    printTitle.textContent = titleInput.value;
-  });
 
   const toolbar = document.createElement("div");
   toolbar.className = "toolbar";
@@ -258,11 +250,11 @@ function addCustomBlock(title = "", content = "") {
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
-  editor.innerHTML = content; // 🟢 új
+  editor.innerHTML = content;
 
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
-  printDiv.innerHTML = content; // 🟢 új
+  printDiv.innerHTML = content;
 
   editor.addEventListener("input", () => {
     printDiv.innerHTML = editor.innerHTML;
@@ -270,7 +262,6 @@ function addCustomBlock(title = "", content = "") {
 
   div.appendChild(deleteBtn);
   div.appendChild(titleInput);
-  div.appendChild(printTitle);
   div.appendChild(toolbar);
   div.appendChild(editor);
   div.appendChild(printDiv);
@@ -336,6 +327,27 @@ function loadSave(name) {
   });
 }
 
+function loadDefault() {
+  if (!confirm("Biztosan új oldalt szeretnél kezdeni? A jelenlegi tartalom elvész!")) return;
+
+  document.getElementById('client-name').value = '';
+  document.getElementById('client-name-print').innerText = '';
+  document.getElementById('criteria-container').innerHTML = '';
+
+  fetch('defaultBlocks.json')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(block => {
+        addCustomBlock(block.title, block.content);
+      });
+    })
+    .catch(error => {
+      console.error('Hiba a blokkok betöltésekor:', error);
+      alert('Nem sikerült betölteni az alapértelmezett mezőket.');
+    });
+}
+
+
 
 function updateSaveList() {
   const list = document.getElementById("save-list");
@@ -345,10 +357,28 @@ function updateSaveList() {
     .filter((key) => key.startsWith("cv_"))
     .forEach((key) => {
       const name = key.replace("cv_", "");
+
       const li = document.createElement("li");
-      li.style.cursor = "pointer";
-      li.textContent = name;
-      li.onclick = () => loadSave(name);
+
+      const loadBtn = document.createElement("span");
+      loadBtn.textContent = name;
+      loadBtn.style.cursor = "pointer";
+      loadBtn.onclick = () => loadSave(name);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️";
+      deleteBtn.style.marginLeft = "10px";
+      deleteBtn.style.cursor = "pointer";
+      deleteBtn.onclick = () => {
+        const confirmed = confirm(`Biztosan törölni szeretnéd a(z) "${name}" nevű mentést?`);
+        if (confirmed) {
+          localStorage.removeItem("cv_" + name);
+          updateSaveList();
+        }
+      };
+
+      li.appendChild(loadBtn);
+      li.appendChild(deleteBtn);
       list.appendChild(li);
     });
 }
