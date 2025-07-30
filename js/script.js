@@ -208,7 +208,7 @@ function downloadPDF() {
   window.print();
 }
 
-function addCustomBlock() {
+function addCustomBlock(title = "", content = "") {
   const div = document.createElement("div");
   div.className = "criteria";
 
@@ -221,14 +221,14 @@ function addCustomBlock() {
   const titleInput = document.createElement("input");
   titleInput.type = "text";
   titleInput.placeholder = "Blokk címe";
+  titleInput.value = title;
   titleInput.style = "font-weight: bold; font-size: 18px; margin-bottom: 12px; width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px;";
 
-  // 🔁 Print változat a címhez
   const printTitle = document.createElement("div");
   printTitle.className = "client-name-print";
   printTitle.style.display = "none";
+  printTitle.textContent = title;
 
-  // Frissítse magát a beírt címből
   titleInput.addEventListener("input", () => {
     printTitle.textContent = titleInput.value;
   });
@@ -258,25 +258,26 @@ function addCustomBlock() {
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
-  editor.innerHTML = "";
+  editor.innerHTML = content;
 
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
-  printDiv.innerHTML = "";
+  printDiv.innerHTML = content;
 
   editor.addEventListener("input", () => {
     printDiv.innerHTML = editor.innerHTML;
   });
 
-  div.appendChild(deleteBtn);        // X gomb
-  div.appendChild(titleInput);       // input cím (szerkesztéshez)
-  div.appendChild(printTitle);       // printre szánt cím (csak nyomtatáskor látszik)
-  div.appendChild(toolbar);          // formázógombok
-  div.appendChild(editor);           // szerkeszthető szöveg
-  div.appendChild(printDiv);         // printre szánt szöveg (csak nyomtatáskor látszik)
+  div.appendChild(deleteBtn);
+  div.appendChild(titleInput);
+  div.appendChild(printTitle);
+  div.appendChild(toolbar);
+  div.appendChild(editor);
+  div.appendChild(printDiv);
 
   container.appendChild(div);
 }
+
 
 function saveCurrent() {
   const name = document.getElementById("save-name").value.trim();
