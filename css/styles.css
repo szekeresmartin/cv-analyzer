@@ -13,6 +13,7 @@ body {
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  margin-left: 240px; /* legyen hely az oldalsávnak */
 }
 
 .client-name-input {
@@ -59,6 +60,7 @@ input[type="text"] {
   border-radius: 12px;
   background-color: #fafbfd;
   box-sizing: border-box;
+  position: relative; /* a törlésgomb elhelyezéséhez szükséges */
 }
 
 .criteria h3 {
@@ -80,8 +82,8 @@ textarea {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 15px;
-  resize: none; /* opcionális, hogy ne lehessen kézzel átméretezni */
-  overflow: hidden; /* ne legyen belső scroll */
+  resize: none;
+  overflow: hidden;
 }
 
 button {
@@ -120,51 +122,6 @@ p {
   cursor: pointer;
 }
 
-.criteria {
-  position: relative; /* a törlésgomb elhelyezéséhez szükséges */
-}
-
-@media print {
-  .criteria {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  .print-text {
-    display: block;
-    white-space: pre-wrap;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 15px;
-    background-color: white;
-    box-sizing: border-box;
-  }
-
-  .delete-btn,
-  input,
-  button {
-    display: none !important;
-  }
-    .container {
-    margin-top: 12px !important;
-  }
-
-  .rich-editor {
-  display: none !important;
-  }
-
-  .client-name-input {
-    display: none !important;
-  }
-
-  .client-name-print {
-    display: block !important;
-  }
-
-}
-
 .rich-editor {
   min-height: 120px;
   border: 1px solid #ccc;
@@ -173,6 +130,8 @@ p {
   font-size: 15px;
   background-color: white;
   outline: none;
+  font-family: inherit;
+  white-space: pre-wrap;
 }
 
 .toolbar {
@@ -193,18 +152,6 @@ p {
   background-color: #e0e0e0;
 }
 
-.rich-editor {
-  min-height: 120px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 15px;
-  background-color: white;
-  outline: none;
-  font-family: inherit;
-  white-space: pre-wrap;
-}
-
 #print-area,
 #print-area * {
   -webkit-print-color-adjust: exact;
@@ -217,7 +164,110 @@ p {
   margin-bottom: 16px;
 }
 
+.print-text {
+  display: none;
+}
+
+.sortable-ghost {
+  opacity: 0.4;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
+  z-index: 999;
+  box-sizing: border-box;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #003594;
+}
+
+.sidebar button {
+  width: 100%;
+  margin-bottom: 12px;
+  background-color: #16B7B1;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sidebar button:hover {
+  background-color: #11918d;
+}
+
+/* === NYOMTATÁSI STÍLUSOK === */
 @media print {
+  .sidebar {
+    display: none !important;
+  }
+
+  .container {
+    margin-top: 12px !important;
+    margin-left: 0 !important;
+  }
+
+  .delete-btn,
+  input,
+  button {
+    display: none !important;
+  }
+
+  .rich-editor {
+    display: none !important;
+  }
+
+  .client-name-input {
+    display: none !important;
+  }
+
+  .client-name-print {
+    display: block !important;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .criteria {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .criteria input[type="text"] {
+    display: none !important;
+  }
+
+  .criteria .client-name-print {
+    display: block !important;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .print-text {
+    display: block;
+    white-space: pre-wrap;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    background-color: white;
+    box-sizing: border-box;
+  }
+
   #name {
     display: none;
   }
