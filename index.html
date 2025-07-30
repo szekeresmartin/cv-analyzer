@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Önéletrajz Elemző</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
 </head>
 <body>
 
@@ -23,6 +25,16 @@
     <div class="result">
       <button onclick="downloadPDF()">Mentés PDF-be</button>
     </div>
+  </div>
+
+  <div class="sidebar">
+    <h2>Eszközök</h2>
+
+    <input type="text" id="save-name" placeholder="Mentés neve" />
+    <button onclick="saveCurrent()">💾 Mentés</button>
+
+    <h3>Korábbi mentések</h3>
+    <ul id="save-list"></ul>
   </div>
 
   <script src="js/script.js"></script>
