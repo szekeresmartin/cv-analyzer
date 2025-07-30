@@ -130,6 +130,7 @@ const criteria = [
 const container = document.getElementById("criteria-container");
 
 criteria.forEach((item) => {
+  
   const div = document.createElement("div");
   div.className = "criteria";
 
@@ -206,3 +207,138 @@ clientNameInput.addEventListener("input", () => {
 function downloadPDF() {
   window.print();
 }
+
+function addCustomBlock() {
+  const div = document.createElement("div");
+  div.className = "criteria";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete-btn";
+  deleteBtn.title = "Törlés";
+  deleteBtn.innerText = "❌";
+  deleteBtn.addEventListener("click", () => div.remove());
+
+  const titleInput = document.createElement("input");
+  titleInput.type = "text";
+  titleInput.placeholder = "Blokk címe";
+  titleInput.style = "font-weight: bold; font-size: 18px; margin-bottom: 12px; width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px;";
+
+  // 🔁 Print változat a címhez
+  const printTitle = document.createElement("div");
+  printTitle.className = "client-name-print";
+  printTitle.style.display = "none";
+
+  // Frissítse magát a beírt címből
+  titleInput.addEventListener("input", () => {
+    printTitle.textContent = titleInput.value;
+  });
+
+  const toolbar = document.createElement("div");
+  toolbar.className = "toolbar";
+
+  const boldBtn = document.createElement("button");
+  boldBtn.innerHTML = "<b>B</b>";
+  boldBtn.type = "button";
+  boldBtn.onclick = () => document.execCommand("bold");
+
+  const italicBtn = document.createElement("button");
+  italicBtn.innerHTML = "<i>I</i>";
+  italicBtn.type = "button";
+  italicBtn.onclick = () => document.execCommand("italic");
+
+  const listBtn = document.createElement("button");
+  listBtn.innerHTML = "•";
+  listBtn.type = "button";
+  listBtn.onclick = () => document.execCommand("insertUnorderedList");
+
+  toolbar.appendChild(boldBtn);
+  toolbar.appendChild(italicBtn);
+  toolbar.appendChild(listBtn);
+
+  const editor = document.createElement("div");
+  editor.className = "rich-editor";
+  editor.contentEditable = "true";
+  editor.innerHTML = "";
+
+  const printDiv = document.createElement("div");
+  printDiv.className = "print-text";
+  printDiv.innerHTML = "";
+
+  editor.addEventListener("input", () => {
+    printDiv.innerHTML = editor.innerHTML;
+  });
+
+  div.appendChild(deleteBtn);        // X gomb
+  div.appendChild(titleInput);       // input cím (szerkesztéshez)
+  div.appendChild(printTitle);       // printre szánt cím (csak nyomtatáskor látszik)
+  div.appendChild(toolbar);          // formázógombok
+  div.appendChild(editor);           // szerkeszthető szöveg
+  div.appendChild(printDiv);         // printre szánt szöveg (csak nyomtatáskor látszik)
+
+  container.appendChild(div);
+}
+
+function saveCurrent() {
+  const name = document.getElementById("save-name").value.trim();
+  if (!name) {
+    alert("Adj meg egy nevet a mentéshez!");
+    return;
+  }
+
+  const allCriteria = document.querySelectorAll(".criteria");
+  const saved = [];
+
+  allCriteria.forEach((block) => {
+    const titleInput = block.querySelector("input[type='text']");
+    const editor = block.querySelector(".rich-editor");
+
+    saved.push({
+      title: titleInput ? titleInput.value : "",
+      content: editor ? editor.innerHTML : ""
+    });
+  });
+
+  localStorage.setItem("cv_" + name, JSON.stringify(saved));
+  updateSaveList();
+  alert(`Mentve: ${name}`);
+}
+
+function loadSave(name) {
+  const data = localStorage.getItem("cv_" + name);
+  if (!data) return;
+
+  container.innerHTML = ""; // kiüríti az összes blokkot
+
+  const parsed = JSON.parse(data);
+  parsed.forEach((item) => {
+    addCustomBlock(item.title, item.content);
+  });
+}
+
+function updateSaveList() {
+  const list = document.getElementById("save-list");
+  list.innerHTML = "";
+
+  Object.keys(localStorage)
+    .filter((key) => key.startsWith("cv_"))
+    .forEach((key) => {
+      const name = key.replace("cv_", "");
+      const li = document.createElement("li");
+      li.style.cursor = "pointer";
+      li.textContent = name;
+      li.onclick = () => loadSave(name);
+      list.appendChild(li);
+    });
+}
+
+  window.addEventListener("DOMContentLoaded", () => {
+  updateSaveList();
+  });
+
+
+// Kritériumblokk-rendezés engedélyezése
+new Sortable(container, {
+  animation: 150,
+  handle: ".criteria", // teljes doboz húzható
+  ghostClass: "sortable-ghost"
+});
