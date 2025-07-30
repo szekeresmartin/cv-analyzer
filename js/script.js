@@ -221,13 +221,13 @@ function addCustomBlock(title = "", content = "") {
   const titleInput = document.createElement("input");
   titleInput.type = "text";
   titleInput.placeholder = "Blokk címe";
-  titleInput.value = title;
+  titleInput.value = title; // 🟢 új
   titleInput.style = "font-weight: bold; font-size: 18px; margin-bottom: 12px; width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px;";
 
   const printTitle = document.createElement("div");
   printTitle.className = "client-name-print";
   printTitle.style.display = "none";
-  printTitle.textContent = title;
+  printTitle.textContent = title; // 🟢 új
 
   titleInput.addEventListener("input", () => {
     printTitle.textContent = titleInput.value;
@@ -258,11 +258,11 @@ function addCustomBlock(title = "", content = "") {
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
-  editor.innerHTML = content;
+  editor.innerHTML = content; // 🟢 új
 
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
-  printDiv.innerHTML = content;
+  printDiv.innerHTML = content; // 🟢 új
 
   editor.addEventListener("input", () => {
     printDiv.innerHTML = editor.innerHTML;
@@ -278,13 +278,22 @@ function addCustomBlock(title = "", content = "") {
   container.appendChild(div);
 }
 
-
 function saveCurrent() {
   const name = document.getElementById("save-name").value.trim();
   if (!name) {
     alert("Adj meg egy nevet a mentéshez!");
     return;
   }
+
+  const key = "cv_" + name;
+
+  // ❗ Ha már létezik ilyen nevű mentés, kérdezzünk rá
+  if (localStorage.getItem(key)) {
+    const confirmed = confirm(`A(z) "${name}" nevű mentés már létezik. Felül szeretnéd írni?`);
+    if (!confirmed) return;
+  }
+
+  const clientName = document.getElementById("client-name").value;
 
   const allCriteria = document.querySelectorAll(".criteria");
   const saved = [];
@@ -299,22 +308,34 @@ function saveCurrent() {
     });
   });
 
-  localStorage.setItem("cv_" + name, JSON.stringify(saved));
+  const fullSave = {
+    clientName,
+    blocks: saved
+  };
+
+  localStorage.setItem(key, JSON.stringify(fullSave));
   updateSaveList();
   alert(`Mentve: ${name}`);
 }
+
 
 function loadSave(name) {
   const data = localStorage.getItem("cv_" + name);
   if (!data) return;
 
-  container.innerHTML = ""; // kiüríti az összes blokkot
-
   const parsed = JSON.parse(data);
-  parsed.forEach((item) => {
+
+  // 👉 Frissítjük a névmezőt is
+  document.getElementById("client-name").value = parsed.clientName || "";
+  document.getElementById("client-name-print").textContent = parsed.clientName || "";
+
+  // Kritériumok kirenderelése
+  container.innerHTML = "";
+  parsed.blocks.forEach((item) => {
     addCustomBlock(item.title, item.content);
   });
 }
+
 
 function updateSaveList() {
   const list = document.getElementById("save-list");
