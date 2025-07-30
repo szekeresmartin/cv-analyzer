@@ -209,7 +209,6 @@ function downloadPDF() {
 }
 
 function addCustomBlock(title = "", content = "") {
-  const container = document.getElementById("criteria-container");
   const div = document.createElement("div");
   div.className = "criteria";
 
@@ -222,8 +221,17 @@ function addCustomBlock(title = "", content = "") {
   const titleInput = document.createElement("input");
   titleInput.type = "text";
   titleInput.placeholder = "Blokk címe";
-  titleInput.value = title;
+  titleInput.value = title; // 🟢 új
   titleInput.style = "font-weight: bold; font-size: 18px; margin-bottom: 12px; width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px;";
+
+  const printTitle = document.createElement("div");
+  printTitle.className = "client-name-print";
+  printTitle.style.display = "none";
+  printTitle.textContent = title; // 🟢 új
+
+  titleInput.addEventListener("input", () => {
+    printTitle.textContent = titleInput.value;
+  });
 
   const toolbar = document.createElement("div");
   toolbar.className = "toolbar";
@@ -250,11 +258,11 @@ function addCustomBlock(title = "", content = "") {
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
-  editor.innerHTML = content;
+  editor.innerHTML = content; // 🟢 új
 
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
-  printDiv.innerHTML = content;
+  printDiv.innerHTML = content; // 🟢 új
 
   editor.addEventListener("input", () => {
     printDiv.innerHTML = editor.innerHTML;
@@ -262,6 +270,7 @@ function addCustomBlock(title = "", content = "") {
 
   div.appendChild(deleteBtn);
   div.appendChild(titleInput);
+  div.appendChild(printTitle);
   div.appendChild(toolbar);
   div.appendChild(editor);
   div.appendChild(printDiv);
@@ -325,22 +334,6 @@ function loadSave(name) {
   parsed.blocks.forEach((item) => {
     addCustomBlock(item.title, item.content);
   });
-}
-
-function loadDefault() {
-  const defaults = [
-    {
-      title: "Fizetési igény",
-      content: "Az önéletrajzban alapvetően nem szükséges megadni a fizetési igényt..."
-    },
-    {
-      title: "Tapasztalatok",
-      content: "Sorold fel a tapasztalatokat, amik az adott pozícióhoz a legjobban kapcsolódnak."
-    }
-  ];
-
-  container.innerHTML = "";
-  defaults.forEach(block => addCustomBlock(block));
 }
 
 function updateSaveList() {
