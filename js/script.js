@@ -174,10 +174,16 @@ criteria.forEach((item) => {
   editor.innerHTML = item.placeholder;
 
   editor.addEventListener("keydown", (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "8") {
-    e.preventDefault();
-    document.execCommand("insertUnorderedList");
-  }
+    const isMac = navigator.platform.toUpperCase().includes("MAC");
+    const isInsertListShortcut = (
+      (isMac && e.metaKey && e.shiftKey && e.key === "8") ||
+      (!isMac && e.ctrlKey && e.shiftKey && e.key === "8")
+    );
+  
+    if (isInsertListShortcut) {
+      e.preventDefault();
+      document.execCommand("insertUnorderedList");
+    }
   });
 
   // Nyomtatási div
