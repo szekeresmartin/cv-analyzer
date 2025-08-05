@@ -173,6 +173,13 @@ criteria.forEach((item) => {
   editor.contentEditable = "true";
   editor.innerHTML = item.placeholder;
 
+  editor.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "8") {
+    e.preventDefault();
+    document.execCommand("insertUnorderedList");
+  }
+  });
+
   // Nyomtatási div
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
