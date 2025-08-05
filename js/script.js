@@ -1,3 +1,132 @@
+let currentEditor = null;
+let savedRange = null; // 🔹 új: elmentjük a kijelölést
+
+// 🔸 Visszaállítjuk a mentett kijelölést
+function restoreSelection() {
+  if (savedRange) {
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(savedRange);
+  }
+}
+
+function makeTextBold() {
+  if (!currentEditor) return;
+  restoreSelection(); // 🔸 visszaállítjuk kijelölést
+
+  const selection = window.getSelection();
+  if (selection.rangeCount === 0) return;
+  const range = selection.getRangeAt(0);
+  const selectedText = range.toString();
+  if (selectedText.trim() === '') return;
+
+  const contents = range.extractContents();
+  const boldElement = document.createElement('strong');
+  boldElement.appendChild(contents);
+  range.insertNode(boldElement);
+  selection.removeAllRanges();
+  updatePrintVersion(currentEditor);
+  currentEditor.focus();
+}
+
+function makeTextItalic() {
+  if (!currentEditor) return;
+  restoreSelection();
+
+  const selection = window.getSelection();
+  if (selection.rangeCount === 0) return;
+  const range = selection.getRangeAt(0);
+  const selectedText = range.toString();
+  if (selectedText.trim() === '') return;
+
+  const contents = range.extractContents();
+  const italicElement = document.createElement('em');
+  italicElement.appendChild(contents);
+  range.insertNode(italicElement);
+  selection.removeAllRanges();
+  updatePrintVersion(currentEditor);
+  currentEditor.focus();
+}
+
+function insertBulletList() {
+  if (!currentEditor) return;
+  restoreSelection();
+
+  const selection = window.getSelection();
+  let range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+
+  if (!range) {
+    range = document.createRange();
+    range.selectNodeContents(currentEditor);
+    range.collapse(false);
+  }
+
+  const ul = document.createElement('ul');
+  const li = document.createElement('li');
+  const selectedText = range.toString();
+
+  if (selectedText.trim() !== '') {
+    const contents = range.extractContents();
+    li.appendChild(contents);
+  } else {
+    li.textContent = 'Új lista elem';
+  }
+
+  ul.appendChild(li);
+  range.insertNode(ul);
+
+  const newRange = document.createRange();
+  newRange.selectNodeContents(li);
+  newRange.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(newRange);
+
+  updatePrintVersion(currentEditor);
+  currentEditor.focus();
+}
+
+function updatePrintVersion(editor) {
+  const printDiv = editor.nextElementSibling;
+  if (printDiv && printDiv.classList.contains('print-text')) {
+    printDiv.innerHTML = editor.innerHTML;
+  }
+}
+
+function createToolbar() {
+  const toolbar = document.createElement("div");
+  toolbar.className = "toolbar";
+
+  const boldBtn = document.createElement("button");
+  boldBtn.innerHTML = "<b>B</b>";
+  boldBtn.type = "button";
+  boldBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    makeTextBold();
+  });
+
+  const italicBtn = document.createElement("button");
+  italicBtn.innerHTML = "<i>I</i>";
+  italicBtn.type = "button";
+  italicBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    makeTextItalic();
+  });
+
+  const listBtn = document.createElement("button");
+  listBtn.innerHTML = "•";
+  listBtn.type = "button";
+  listBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    insertBulletList();
+  });
+
+  toolbar.appendChild(boldBtn);
+  toolbar.appendChild(italicBtn);
+  toolbar.appendChild(listBtn);
+
+  return toolbar;
+}
+
 const criteria = [
   {
   title: "Az önéletrajz hossza",
@@ -130,85 +259,49 @@ const criteria = [
 const container = document.getElementById("criteria-container");
 
 criteria.forEach((item) => {
-  
   const div = document.createElement("div");
   div.className = "criteria";
 
-  // Törlés gomb
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "delete-btn";
   deleteBtn.title = "Törlés";
   deleteBtn.innerText = "❌";
 
-  // Cím
   const title = document.createElement("h3");
   title.textContent = item.title;
 
-  // Toolbar
-  const toolbar = document.createElement("div");
-  toolbar.className = "toolbar";
+  const toolbar = createToolbar();
 
-  const boldBtn = document.createElement("button");
-  boldBtn.innerHTML = "<b>B</b>";
-  boldBtn.type = "button";
-  boldBtn.onclick = () => document.execCommand("bold");
-
-  const italicBtn = document.createElement("button");
-  italicBtn.innerHTML = "<i>I</i>";
-  italicBtn.type = "button";
-  italicBtn.onclick = () => document.execCommand("italic");
-
-  const listBtn = document.createElement("button");
-  listBtn.innerHTML = "•";
-  listBtn.type = "button";
-  listBtn.onclick = () => document.execCommand("insertUnorderedList");
-
-  toolbar.appendChild(boldBtn);
-  toolbar.appendChild(italicBtn);
-  toolbar.appendChild(listBtn);
-
-  // Szerkeszthető mező
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
   editor.innerHTML = item.placeholder;
 
-  editor.addEventListener("keydown", (e) => {
-    const isMac = navigator.platform.toUpperCase().includes("MAC");
-    const isInsertListShortcut = (
-      (isMac && e.metaKey && e.shiftKey && e.key === "8") ||
-      (!isMac && e.ctrlKey && e.shiftKey && e.key === "8")
-    );
-  
-    if (isInsertListShortcut) {
-      e.preventDefault();
-      document.execCommand("insertUnorderedList");
-    }
-  });
-
-  // Nyomtatási div
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
   printDiv.innerHTML = item.placeholder;
 
-  editor.addEventListener("input", () => {
-    printDiv.innerHTML = editor.innerHTML;
-  });
+  editor.addEventListener("focus", () => currentEditor = editor);
+  editor.addEventListener("mousedown", () => currentEditor = editor);
+  editor.addEventListener("input", () => updatePrintVersion(editor));
+  editor.addEventListener("mouseup", () => {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    savedRange = selection.getRangeAt(0);
+  }
+});
 
-  deleteBtn.addEventListener("click", () => {
-    div.remove();
-  });
+  deleteBtn.addEventListener("click", () => div.remove());
 
   div.appendChild(deleteBtn);
   div.appendChild(title);
-  div.appendChild(toolbar);      // ⬅️ ide kerül a toolbar
+  div.appendChild(toolbar);
   div.appendChild(editor);
   div.appendChild(printDiv);
 
   container.appendChild(div);
 });
 
-// Név mező tükrözése a nyomtatási változatba
 const clientNameInput = document.getElementById("client-name");
 const clientNamePrint = document.getElementById("client-name-print");
 
@@ -216,9 +309,58 @@ clientNameInput.addEventListener("input", () => {
   clientNamePrint.textContent = clientNameInput.value;
 });
 
-// PDF export
 function downloadPDF() {
   window.print();
+}
+
+function loadDefault() {
+  container.innerHTML = "";
+  criteria.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "criteria";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.title = "Törlés";
+    deleteBtn.innerText = "❌";
+
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+
+    const toolbar = createToolbar();
+
+    const editor = document.createElement("div");
+    editor.className = "rich-editor";
+    editor.contentEditable = "true";
+    editor.innerHTML = item.placeholder;
+
+    const printDiv = document.createElement("div");
+    printDiv.className = "print-text";
+    printDiv.innerHTML = item.placeholder;
+
+    editor.addEventListener("focus", () => currentEditor = editor);
+    editor.addEventListener("mousedown", () => currentEditor = editor);
+    editor.addEventListener("input", () => updatePrintVersion(editor));
+    editor.addEventListener("mouseup", () => {
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        savedRange = selection.getRangeAt(0);
+      }
+    });
+
+    deleteBtn.addEventListener("click", () => div.remove());
+
+    div.appendChild(deleteBtn);
+    div.appendChild(title);
+    div.appendChild(toolbar);
+    div.appendChild(editor);
+    div.appendChild(printDiv);
+
+    container.appendChild(div);
+  });
+
+  document.getElementById("client-name").value = "";
+  document.getElementById("client-name-print").textContent = "";
 }
 
 function addCustomBlock(title = "", content = "") {
@@ -234,51 +376,37 @@ function addCustomBlock(title = "", content = "") {
   const titleInput = document.createElement("input");
   titleInput.type = "text";
   titleInput.placeholder = "Blokk címe";
-  titleInput.value = title; // 🟢 új
+  titleInput.value = title;
   titleInput.style = "font-weight: bold; font-size: 18px; margin-bottom: 12px; width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px;";
 
   const printTitle = document.createElement("div");
   printTitle.className = "client-name-print";
   printTitle.style.display = "none";
-  printTitle.textContent = title; // 🟢 új
+  printTitle.textContent = title;
 
   titleInput.addEventListener("input", () => {
     printTitle.textContent = titleInput.value;
   });
 
-  const toolbar = document.createElement("div");
-  toolbar.className = "toolbar";
-
-  const boldBtn = document.createElement("button");
-  boldBtn.innerHTML = "<b>B</b>";
-  boldBtn.type = "button";
-  boldBtn.onclick = () => document.execCommand("bold");
-
-  const italicBtn = document.createElement("button");
-  italicBtn.innerHTML = "<i>I</i>";
-  italicBtn.type = "button";
-  italicBtn.onclick = () => document.execCommand("italic");
-
-  const listBtn = document.createElement("button");
-  listBtn.innerHTML = "•";
-  listBtn.type = "button";
-  listBtn.onclick = () => document.execCommand("insertUnorderedList");
-
-  toolbar.appendChild(boldBtn);
-  toolbar.appendChild(italicBtn);
-  toolbar.appendChild(listBtn);
+  const toolbar = createToolbar();
 
   const editor = document.createElement("div");
   editor.className = "rich-editor";
   editor.contentEditable = "true";
-  editor.innerHTML = content; // 🟢 új
+  editor.innerHTML = content;
 
   const printDiv = document.createElement("div");
   printDiv.className = "print-text";
-  printDiv.innerHTML = content; // 🟢 új
+  printDiv.innerHTML = content;
 
-  editor.addEventListener("input", () => {
-    printDiv.innerHTML = editor.innerHTML;
+  editor.addEventListener("focus", () => currentEditor = editor);
+  editor.addEventListener("mousedown", () => currentEditor = editor);
+  editor.addEventListener("input", () => updatePrintVersion(editor));
+  editor.addEventListener("mouseup", () => {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      savedRange = selection.getRangeAt(0);
+    }
   });
 
   div.appendChild(deleteBtn);
@@ -299,15 +427,12 @@ function saveCurrent() {
   }
 
   const key = "cv_" + name;
-
-  // ❗ Ha már létezik ilyen nevű mentés, kérdezzünk rá
   if (localStorage.getItem(key)) {
     const confirmed = confirm(`A(z) "${name}" nevű mentés már létezik. Felül szeretnéd írni?`);
     if (!confirmed) return;
   }
 
   const clientName = document.getElementById("client-name").value;
-
   const allCriteria = document.querySelectorAll(".criteria");
   const saved = [];
 
@@ -331,18 +456,14 @@ function saveCurrent() {
   alert(`Mentve: ${name}`);
 }
 
-
 function loadSave(name) {
   const data = localStorage.getItem("cv_" + name);
   if (!data) return;
 
   const parsed = JSON.parse(data);
-
-  // 👉 Frissítjük a névmezőt is
   document.getElementById("client-name").value = parsed.clientName || "";
   document.getElementById("client-name-print").textContent = parsed.clientName || "";
 
-  // Kritériumok kirenderelése
   container.innerHTML = "";
   parsed.blocks.forEach((item) => {
     addCustomBlock(item.title, item.content);
@@ -357,7 +478,6 @@ function updateSaveList() {
     .filter((key) => key.startsWith("cv_"))
     .forEach((key) => {
       const name = key.replace("cv_", "");
-
       const li = document.createElement("li");
 
       const loadBtn = document.createElement("span");
@@ -383,14 +503,12 @@ function updateSaveList() {
     });
 }
 
-  window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
   updateSaveList();
-  });
+});
 
-
-// Kritériumblokk-rendezés engedélyezése
 new Sortable(container, {
   animation: 150,
-  handle: ".criteria", // teljes doboz húzható
+  handle: ".criteria",
   ghostClass: "sortable-ghost"
 });
